@@ -38,6 +38,8 @@ By following these steps, you should be able to make more accurate demand foreca
 
 
 
+-
+1.data settings.
 
 
 
