@@ -42,4 +42,12 @@ By following these steps, you should be able to make more accurate demand foreca
 1.data settings.
 
 
+Here, "Profit" refers to the profit per unit of product, expressed in US dollars, and it is a continuous numerical variable;
+ "InventoryLevel" refers to the inventory quantity of the product, expressed in units of pieces, and it is a discrete numerical variable; 
+
+ "SupplyChainFlexibility" refers to the supply chain flexibility of the product, expressed in units of grades, ranging from 1 to 5, and it is also a discrete numerical variable.
+
+
+
+
 

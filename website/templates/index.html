@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Family Preference</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+<form method="POST">
+    <select name="family_type">
+        <option value="A">A</option>
+        <option value="B">B</option>
+        <option value="C">C</option>
+    </select>
+    <input type="submit" value="Submit">
+</form>
+
+<div id="plot"></div>
+<script>
+var plot = {{ plot|safe }};
+Plotly.newPlot('plot', [plot]);
+</script>
+</body>
+</html>
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Family Preference</title>
+    <script src="https://cdn.bokeh.org/bokeh/release/bokeh-2.3.3.min.js"></script>
+</head>
+<body>
+    <form method="POST">
+        <label for="family_type">Choose a family type:</label>
+        <select name="family_type" id="family_type">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+        </select>
+        <input type="submit" value="Submit">
+    </form>
+    {{ div | safe }}
+    {{ script | safe }}
+</body>
+</html> -->
+
+
+
+
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>Family Preferences</title>
+</head>
+<body>
+    <h1>Family Preferences</h1>
+    <p>Select a family:</p>
+    <ul>
+        <li><a href="/family/A">Family A</a></li>
+        <li><a href="/family/B">Family B</a></li>
+        <li><a href="/family/C">Family C</a></li>
+    </ul>
+</body>
+</html>
+ -->
