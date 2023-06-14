@@ -6,11 +6,12 @@ def handle_extreme_weather(special_dates_df, base_activity_levels):
     extreme_weather_dates = special_dates_df[special_dates_df['type'] == 'extreme_weather']
 
     for _, row in extreme_weather_dates.iterrows():
-        base_activity_levels[row['start_date'] - pd.Timedelta(days=2):row['start_date'] - pd.Timedelta(days=1)] *= 2
-        base_activity_levels[row['start_date']:row['end_date']] *= 0.5
+        base_activity_levels.loc[row['start_date'] - pd.Timedelta(days=2):row['start_date'] - pd.Timedelta(days=1), :] *= 2
+        base_activity_levels.loc[row['start_date']:row['end_date'], :] *= 0.5
         recovery_dates = pd.date_range(start=row['end_date'] + pd.Timedelta(days=1), periods=min(3, len(base_activity_levels) - row['end_date'].dayofyear))
         for i, date in enumerate(recovery_dates):
-            base_activity_levels[date] *= (0.7 + 0.1 * (i + 1))
+            if date in base_activity_levels.index:
+                base_activity_levels.loc[date, :] *= (0.7 + 0.1 * (i + 1))
     
     return base_activity_levels
 
@@ -41,7 +42,7 @@ base_activity_levels = pd.DataFrame({
 # 根据特殊日期增加活动级别
 for _, row in special_dates_df.iterrows():
     if row['type'] != 'extreme_weather':
-        base_activity_levels.loc[row['start_date']:row['end_date']] += activity_level_increments[row['type']]
+        base_activity_levels.loc[row['start_date']:row['end_date'], :] += activity_level_increments[row['type']]
     else:
         base_activity_levels = handle_extreme_weather(special_dates_df, base_activity_levels)
 
