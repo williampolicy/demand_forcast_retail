@@ -1,0 +1,122 @@
+在Python中，`__init__.py`文件用于表示其所在的目录应被视为一个Python包，可以包含代码，也可以为空。这个文件会在导入包时首先被执行。如果你没有特殊的初始化代码需要执行，那么这个文件可以是空的。
+
+下面是一个简单的`__init__.py`文件例子，它什么也不做：
+
+```python
+# This is an empty file.
+```
+
+如果你在包中有某些函数或者类需要导出，你可以在`__init__.py`文件中指定。例如，假设你有一个叫做`forecast.py`的模块，其中有一个`prepare_data`函数，你可以这样写`__init__.py`：
+
+```python
+from .forecast import prepare_data
+```
+
+然后，你就可以这样导入函数：
+
+```python
+from kangforecast import prepare_data
+```
+
+如果你没有特殊的导出需求，那么一个空的`__init__.py`文件就足够了。
+
+在你的情况下，你需要在`kangforecast`目录下创建一个`__init__.py`文件（如果不存在的话）。然后，你需要确保你的数据文件（`special_dates.csv`）在`kangforecast/data`目录下，然后在你的`setup.py`文件中指定`package_data={'kangforecast': ['data/*.csv']}`。完成这些后，你应该就可以正确地打包和安装你的`kangforecast`包，并能够在安装后读取数据文件了。
+
+最后，重新生成新版本的包，你需要更新`setup.py`中的版本号，比如改为`version='0.3'`，然后重新运行`python setup.py sdist bdist_wheel`来生成新的发行版本。
+
+
+---
+you are rght! we got it !!!  kang@Love-Grace release_pypi$ python test_kangforecast.py 
+---------print file kangforecast.__file__:
+
+/Users/kang/1.live_wit_GPT4/code_project/demand_forcast_retail/release_pypi/kangforecast/__init__.py
+---------
+
+   start_date    end_date             type
+0  2022-06-01  2022-06-07         discount
+1  2022-12-23  2022-12-26          holiday
+2  2022-02-01   2022-02-5  extreme_weather
+------
+
+确实，将这个过程记录下来是个好主意，这可以帮助您在未来遇到类似问题时快速地找到解决方案。
+
+一般来说，如果您将日志文件存储在项目的根目录下，它们不会被包含在构建或发布的Python包中。为了确保不包含这些文件，您可以在MANIFEST.in文件中显式地排除它们。如果你的项目没有这个文件，你可以创建一个，并添加一行内容，如exclude *.log。
+
+对于日志文件的命名，我建议使用一个明确、描述性的名称，可以清晰地表明这是一个日志文件以及它的内容。考虑到这是关于您项目构建和发布的日志，您可以命名为build_release.log。
+----
+
+
+
+`MANIFEST.in` 文件是 setuptools 中用来控制在构建源码分发（如源代码的 tarball 或 zip 文件）时哪些文件会被包含进去的。具体来说，`MANIFEST.in` 文件中的指令决定了哪些文件和目录会被包含在源码分发中，而 `package_data` 参数则决定了哪些文件会被包含在安装的包中。
+
+对于 `special_dates.csv` 这样的非代码文件，如果你希望它们被包含在源码分发和安装包中，那么你需要在 `setup.py` 文件的 `package_data` 参数中包含它们，并且在 `MANIFEST.in` 文件中也要包含它们。
+
+包含 `special_dates.csv` 文件在 `MANIFEST.in` 文件中并不会影响到该文件是否被编译为二进制代码，因为 `MANIFEST.in` 文件只是决定了哪些文件会被包含在源码分发中，它并不影响编译过程。
+
+总的来说，`MANIFEST.in` 文件主要用于控制哪些额外的非代码文件（如数据文件、文档、示例等）会被包含在源码分发中，而 `setup.py` 文件的 `package_data` 参数用于控制哪些非代码文件会被包含在安装的包中。
+
+---
+在Python包开发中，`MANIFEST.in`和`setup.py`中的`package_data`参数都用于指定非Python文件（如图片、数据文件等）的包含。然而，它们的使用场景和作用是有所不同的。
+
+1. `MANIFEST.in`：这个文件用于控制哪些额外的文件会被包含在源码分发（例如tar.gz文件）中。当其他开发者下载并安装你的源码包时，`MANIFEST.in`中列出的文件将被包含在内。通常这些文件包括README、LICENSE以及其他文档文件，但也可以包括数据文件。
+
+2. `package_data`参数：这个参数在`setup.py`中设置，用于指定非Python文件被安装时应该如何被包含。当你的包被安装时，无论是通过源码包还是wheel包，`package_data`中指定的文件都会被复制到正确的位置。
+
+因此，你可以把`MANIFEST.in`看作是源码包的控制，而`package_data`则是安装过程的控制。如果你希望你的包在被其他人从源码安装时也包含某些非Python文件，你需要确保这些文件既在`MANIFEST.in`中被列出，也在`package_data`中被指定。
+--------------------
+### - 把`MANIFEST.in`看作是源码包的控制，- `package_data`则是安装过程的控制
+--------------------
+---
+
+-----SELL 脚本- 批处理
+你可以把这些命令放在一个shell脚本中，然后直接运行这个脚本来完成你的任务。下面是一个简单的bash脚本示例（假设我们将它命名为`upload_new_version.sh`）：
+
+```bash
+#!/bin/bash
+
+echo "Removing old distributions..."
+rm -rf ./dist/*
+
+echo "Building new distribution..."
+python setup.py sdist bdist_wheel
+
+echo "Uploading new distribution to PyPI..."
+twine upload dist/*
+
+echo "Uninstalling old version of kangforecast..."
+pip uninstall -y kangforecast
+
+echo "Installing new version of kangforecast..."
+pip install --no-cache-dir --upgrade kangforecast
+
+echo "All done!"
+```
+
+这个脚本首先会删除旧的分发文件，然后创建新的分发文件，上传到PyPI，然后卸载旧的kangforecast版本，并安装新的版本。
+
+请注意，这个脚本假设所有这些命令都是在同一目录下运行，并且你有运行这些命令所需的必要权限。
+
+一旦你创建了这个脚本，你需要使其可执行。在终端中，你可以使用以下命令来完成这个操作：
+
+```bash
+chmod +x upload_new_version.sh
+```
+
+然后，你就可以运行这个脚本了：
+
+```bash
+./upload_new_version.sh
+```
+-----
+
+-rwxr-xr-x   1 kang  staff   404 Jun 16 01:01 upload_new_version.sh
+
+---NOTE：`Makefile`和shell脚本都是用来自动化命令执行的，但他们的用途和工作方式有些不同。
+
+- `Makefile` 是 `make` 命令的配套文件，主要用于编译和构建项目。`Makefile` 的一个关键特性是其对文件和目标（targets）的依赖关系的处理。`make` 工具会检查目标文件的修改时间与其依赖项的修改时间，只有当依赖项更新后，目标才会被重新构建。这对于大型项目来说，可以节省大量的编译和构建时间。
+
+- Shell脚本（比如上面的bash脚本示例）更为通用，可以用来自动化几乎任何可以在命令行中执行的任务。Shell脚本执行的是顺序命令，没有 `Makefile` 那样的依赖关系检查特性。
+
+对于你的场景（即创建和上传Python包），使用Shell脚本是一个合理的选择，因为这个过程主要涉及到一系列的命令执行，而不涉及复杂的依赖关系。而 `Makefile` 更常用于源码编译和构建的场景。
+----
+

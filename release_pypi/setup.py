@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='kangforecast',
-    version='0.1',
+    version='0.8',
     description='A simple forecast package.',
     author='Xiaowen Kang',
     author_email='kangxiaowen@gmail.com',
