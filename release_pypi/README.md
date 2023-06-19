@@ -133,3 +133,26 @@ you are rght! we got it !!!  kang@Love-Grace release_pypi$ python test_kangforec
 2  2022-02-01   2022-02-5  extreme_weather
 
 
+------为避免冲突，特别是 pip kanglib pip kangforecast 我们使用Docker 并建设镜像
+uname -a
+cat /etc/os-release
+
+root@64fe8260fc20:/app/demand_forcast_retail/release_pypi# uname -a
+Linux 64fe8260fc20 5.15.49-linuxkit-pr #1 SMP PREEMPT Thu May 25 07:27:39 UTC 2023 aarch64 GNU/Linux
+root@64fe8260fc20:/app/demand_forcast_retail/release_pypi# cat /etc/os-release
+PRETTY_NAME="Debian GNU/Linux 10 (buster)"
+NAME="Debian GNU/Linux"
+VERSION_ID="10"
+VERSION="10 (buster)"
+VERSION_CODENAME=buster
+ID=debian
+HOME_URL="https://www.debian.org/"
+SUPPORT_URL="https://www.debian.org/support"
+BUG_REPORT_URL="https://bugs.debian.org/"
+-------
+我们的系统是PRETTY_NAME="Debian GNU/Linux 10 (buster)" 稳定的linux 10. 
+
+
+-------1. 完成数据准备。2. 数据处理  3. 数据展示。
+
+---test_activity_special_date_v2.py  这个程序是可以用的。
