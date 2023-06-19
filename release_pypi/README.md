@@ -156,3 +156,177 @@ BUG_REPORT_URL="https://bugs.debian.org/"
 -------1. 完成数据准备。2. 数据处理  3. 数据展示。
 
 ---test_activity_special_date_v2.py  这个程序是可以用的。
+-------- 2023.6.19
+- 1. 给出完整的思路。 ---明确几个模块-先把大模块搭起来。测试一下。
+- 2. 完整模块，而后进入一个问题。把每个问题梳理一下-完成子模块
+- 给出    几个要点和思路。
+首先需要一个大框架。- 1. 读取数据。2. 分析数据。 3. 结果数据（包括可视化）
+from kangforecast.data_loader import load_data
+from kangforecast.data_analysis import analyze
+
+def main():
+    dataframe = load_data("data/testdata.csv")
+    result = analyze(dataframe)
+    print(result)
+
+if __name__ == "__main__":
+    main()
+
+
+kang@Love-Grace release_pypi$ cat kangforecast/data_loader.py 
+import pandas as pd
+
+def load_data(filename):
+    return pd.read_csv(filename)
+kang@Love-Grace release_pypi$ cat kangforecast/data_analysis.py 
+def analyze(dataframe):
+    return dataframe.mean()
+
+---problem:关于再次无法找到哦No module named 'kangforecast'
+很可能 pip  与 python 两个渠道不一致。 需要查看下。 
+
+which python
+/usr/local/bin/python
+
+kang@Love-Grace release_pypi$ pip show kangforecast
+Location: /usr/local/lib/python3.11/site-packages
+Name: kangforecast
+Version: 0.17
+
+kang@Love-Grace release_pypi$ python -m pip show kangforecast
+Name: kangforecast
+Version: 0.1
+Summary: A simple forecast package.
+Home-page: https://www.linkedin.com/in/xiaowenkang/
+Author: Xiaowen Kang
+Author-email: kangxiaowen@gmail.com
+License: 
+Location: /Users/kang/Library/Python/3.8/lib/python/site-packages
+
+----
+问题：
+kang@Love-Grace release_pypi$ pip show kangforecast
+Location: /usr/local/lib/python3.11/site-packages
+Name: kangforecast
+Version: 0.17
+
+kang@Love-Grace release_pypi$ python -m pip show kangforecast
+Name: kangforecast
+Version: 0.1
+Summary: A simple forecast package.
+Home-page: https://www.linkedin.com/in/xiaowenkang/
+Author: Xiaowen Kang
+Author-email: kangxiaowen@gmail.com
+License: 
+Location: /Users/kang/Library/Python/3.8/lib/python/site-packages
+----两个语句 相差了一个 -m   为何位置 和版本都不一样？ 
+
+`python -m pip` 和 `pip` 在命令行中输入可能会指向不同的Python环境，这取决于你的系统设置和Python环境配置。
+
+`pip` 通常指向你的系统默认Python环境或者是在你的环境变量中设定的Python环境。在某些系统中，`pip` 可能会默认指向Python 2，尽管你的系统默认的Python版本可能已经是Python 3。
+
+`python -m pip` 会用 `python` 指向的Python解释器来运行pip模块。`python` 在你的系统中可能已经被设定为指向一个特定的Python版本，或者是你当前激活的虚拟环境的Python解释器。
+
+所以当你用 `pip show` 和 `python -m pip show` 的时候，可能会查找到两个不同的Python环境中的包，所以它们的版本和位置可能会不一样。 
+
+一个解决这个问题的办法是始终在指定的Python环境中使用 `python -m pip` 来安装和管理你的Python包，以避免环境混淆。或者，你可以使用Python的虚拟环境（如venv或conda）来为每个项目创建一个独立的环境，这样可以确保你的项目环境中的包版本和依赖关系的一致性。
+---- 解决方案：
+kang@Love-Grace release_pypi$ which python
+/usr/local/bin/python
+或者：
+kang@Love-Grace release_pypi$ python --version
+Python 3.8.0
+
+python3 -m pip install kangforecast
+或者：
+python3.8 -m pip install kangforecast
+
+从你提供的信息来看，kangforecast已经成功安装到Python 3.8版本中。你的Python 3.8环境中的kangforecast版本为0.17，这与你期望的版本一致。
+其中，Defaulting to user installation because normal site-packages is not writeable这条信息表明，pip无法在全局site-packages目录下安装包，因此默认安装到用户级别的site-packages目录。这通常不会造成问题。
+然而，你的Python环境出现了一些异常的分发情况（"Ignoring invalid distribution"的警告）。这可能是由于某些包安装或卸载时遇到的问题，或者你的Python环境有些混乱。你可以考虑清理或修复这些问题，以确保你的Python环境的正常工作。如果你不确定如何进行，可能需要寻求专业的技术支持。
+-- --> 我们争取统一到 Python 3.8.0 的版本中。
+-第一我希望删除旧版本的kangforecast。 因为过去我们曾经出现了这个情况：pi$ /usr/local/bin/python -m pip install kangforecast
+DEPRECATION: Python 2.7 will reach the end of its life on January 1st, 2020. Please upgrade your Python as Python 2.7 won't be maintained after that date. A future version of pip will drop support for Python 2.7.
+Requirement already satisfied: kangforecast in /usr/local/lib/python2.7/site-packages (0.1)--我们先删除这个版本
+-
+/usr/local/bin/python -m pip uninstall kangforecast
+
+---> export PATH="/Users/kang/Library/Python/3.8/bin:$PATH"
+ echo $SHELL
+/bin/bash
+Mac中 以这个版本为准 ~/.bash_profile 
+-
+# Setting PATH
+export PATH="/usr/local/bin:$PATH"  # Homebrew Python interpreter  -移动到最后，最后执行，收官有效。因此后续都是优先执行。
+export PATH="/Users/kang/Library/Python/3.8/bin:$PATH"
+ 我们出现了两个这样的路径，是否会冲突？
+-不会产生冲突，但会有一个优先级的概念。
+你的系统会按照`PATH`环境变量中的顺序去查找命令。如果在一个路径中找到了匹配的命令，系统就会停止进一步搜索，并执行找到的命令。
+在你的例子中，`/Users/kang/Library/Python/3.8/bin`被添加到了`PATH`环境变量的开头，所以系统会优先在这个路径中查找命令。只有当在这个路径中没有找到匹配的命令时，系统才会继续在`/usr/local/bin`这个路径中查找。
+所以，这种设置并不会产生冲突，但是会改变命令的查找顺序。如果两个路径中都有同样的命令，那么系统将会执行先找到的那一个。
+----
+
+解释- 这个内容比较多，我发布一个Blog 方便自己记忆和查询： 主要内容为： python python3  aline别名 路径 pip pip3 以及冲突。以及库的存储
+更新在：https://williampolicy.github.io/blog/
+https://williampolicy.github.io/blog/2023/Python-and-Pip_version_alias_syspath/
+已发布。这样我就弄明白了这些关系了。 
+--------- 很清楚，非常好！【solved path problem】 (有了这个解决方案，我暂时不需要 docker，尽管我可以做，但是目前我就用本机，避免复杂)
+在 main.py 的基础上，完成三个部分。或者就是两个部分-读取和分析。
+先不想写序号。我觉得序号写得更清楚。 序号比文字，更清楚。 
+
+-1.load
+-2.process
+-3.show
+我觉的这个比较清楚。现出第一个版本。 
+
+
+## 关于 Python 解释器运行的问题。。
+-你在执行`upload_new_version.sh`脚本时遇到了一个`SyntaxError: invalid syntax`错误，这个错误是在执行`renew_setup_version.py`脚本时产生的。出错的代码是一个`print`函数调用，这个函数调用使用了Python 3.6引入的f-string语法。
+
+问题是，尽管单独运行`renew_setup_version.py`没有问题，但是当它被bash脚本调用时就会报错。这个问题的原因可能是，你的bash环境使用的Python解释器与你单独运行Python脚本时使用的Python解释器版本不同。可能bash环境使用的是Python 2，而你单独运行脚本时使用的是Python 3。
+
+为了解决这个问题，你可以在bash脚本中明确使用Python 3来执行`renew_setup_version.py`。你可以通过指定Python 3的完整路径或者使用`python3`命令（如果你的环境中已经配置了该命令）。下面是如何修改你的bash脚本：
+
+将
+
+```bash
+python ./clear_clean_go_upgrage/renew_setup_version.py
+```
+
+修改为
+
+```bash
+python3 ./clear_clean_go_upgrage/renew_setup_version.py
+```
+
+--修改如下
+#!/bin/bash
+
+# Update version number in setup.py
+echo "Update version number in setup.py..."
+python3 ./clear_clean_go_upgrage/renew_setup_version.py
+
+---
+
+的确，通过脚本 bash  .sh 文件运行时，可能不会理解 别名的问题。因此我们需要修改 .sh文件中的命令。
+[Solved! well done]
+
+-- 完成。 
+
+## Task -->在 main.py 的基础上，完成三个部分。或者就是两个部分-读取和分析。
+先不想写序号。我觉得序号写得更清楚。 序号比文字，更清楚。 
+
+-1.load
+-2.process
+-3.show
+我觉的这个比较清楚。现出第一个版本。 
+-
+
+----很好！ 先本地测试： python main. 
+之后完成 uplaoad...
+then ,在 tests 测试， test_m1m2m3.py
+----
+完成测试。
+pytest -s test_pytest_m1m2m3.py
+
+

@@ -24,3 +24,28 @@ Daker, 本机，相当于两套系统。两个电脑在测试。
 
 ---
 
+V0.40:
+## Task -->在 main.py 的基础上，完成三个部分。或者就是两个部分-读取和分析。
+先不想写序号。我觉得序号写得更清楚。 序号比文字，更清楚。 
+
+-1.load
+-2.process
+-3.show
+我觉的这个比较清楚。现出第一个版本。 
+-
+为避免 _ 与. 的混淆， 我们采用中线。 为避免 .与.混淆，我们采用-
+因此，我们的三个程序为：
+1-load
+2-process
+3-show
+
+v0.47
+-完成测试：
+名称修改为更为可读的：
+-rw-r--r--   1 kang  staff    76 Jun 19 13:17 m1load.py
+-rw-r--r--   1 kang  staff    64 Jun 19 14:31 m2process.py
+-rw-r--r--   1 kang  staff    45 Jun 19 14:40 m3show.py
+-rw-r--r--   1 kang  staff  1787 Jun 19 14:41 main.py
+-并通过 main.py 进行测试
+-发布后，通过两种方式测试：
+测试1：

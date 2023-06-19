@@ -159,3 +159,93 @@ pytest
 cd tests
 pytest test_module1.py
 
+-----
+
+pytest test_pytest_m1m2m3.py
+
+
+--
+
+
+kang@Love-Grace tests$ cat test_pytest_m1m2m3.py 
+# In test_pytest_m1m2m3.py
+
+import pandas as pd
+from kangforecast.m1load import m1load
+from kangforecast.m2process import m2process
+
+def test_main_process():
+    print("Starting the test process...\n")
+
+    print("m1: Loading data from ./tests/testdata/test_pytest_m1m2m3_input.csv...")
+    df = m1load("./testdata/test_pytest_m1m2m3_input.csv")
+    print("m1: Test data loaded successfully.\n")
+    
+    print("m2: Processing test data...")
+    processed_df = m2process(df)
+    print("m2: Test data processing complete.\n")
+    
+    print("m3: Verifying the result...")
+    print("    ", end="\n")
+
+    # Load expected output
+    expected_df = pd.read_csv("./testdata/test_pytest_m1m2m3_output.csv")
+    expected_output = expected_df['value'].median()
+
+    # Verify that the processed data matches the expected result
+
+    assert processed_df == expected_output, \
+        f'Expected {expected_output}, but got {processed_df}'
+
+    
+    print("m3: Verification successful.\n")
+
+    print("Test process complete!\n")
+kang@Love-Grace tests$ pytest test_pytest_m1m2m3.py
+================================================================================== test session starts ==================================================================================
+platform darwin -- Python 3.8.0, pytest-7.3.2, pluggy-1.0.0
+rootdir: /Users/kang/1.live_wit_GPT4/code_project/demand_forcast_retail/release_pypi
+plugins: dash-2.10.2, anyio-3.2.1
+collected 1 item                                                                                                                                                                        
+
+test_pytest_m1m2m3.py .                                                                                                                                                           [100%]
+
+=================================================================================== 1 passed in 0.35s ===================================================================================
+kang@Love-Grace tests$ 
+
+----
+有一个问题，我们在test_pytest_m1m2m3.py中有很多后台输出，然而我们运行pytest 却没有我们的打印过程输出？ 什么原因？ 另如何也让这些打印过程，也打印出来
+
+pytest -s test_pytest_m1m2m3.py
+
+-
+kang@Love-Grace tests$ pytest -s test_pytest_m1m2m3.py
+================================================================================== test session starts ==================================================================================
+platform darwin -- Python 3.8.0, pytest-7.3.2, pluggy-1.0.0
+rootdir: /Users/kang/1.live_wit_GPT4/code_project/demand_forcast_retail/release_pypi
+plugins: dash-2.10.2, anyio-3.2.1
+collected 1 item                                                                                                                                                                        
+
+test_pytest_m1m2m3.py Starting the test process...
+
+m1: Loading data from ./tests/testdata/test_pytest_m1m2m3_input.csv...
+m1: Test data loaded successfully.
+
+m2: Processing test data...
+m2: Test data processing complete.
+
+m3: Verifying the result...
+    
+m3: Verification successful.
+
+Test process complete!
+
+.
+
+=================================================================================== 1 passed in 0.37s ===================================================================================
+kang@Love-Grace tests$ 
+
+---
+
+
+
