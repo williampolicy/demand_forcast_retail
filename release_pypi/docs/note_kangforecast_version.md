@@ -48,4 +48,15 @@ v0.47
 -rw-r--r--   1 kang  staff  1787 Jun 19 14:41 main.py
 -并通过 main.py 进行测试
 -发布后，通过两种方式测试：
-测试1：
+测试1：tests$ python test_m1m2m3.py 
+测试2：pytest -s test_pytest_m1m2m3.py
+
+保存备份包：
+-rw-r--r--   1 kang  staff    76 Jun 19 13:17 m1load.py
+-rw-r--r--   1 kang  staff    64 Jun 19 14:31 m2process.py
+-rw-r--r--   1 kang  staff    45 Jun 19 14:40 m3show.py
+-rw-r--r--   1 kang  staff  1787 Jun 19 14:41 main.py
+保存到根目录下的 ./bk
+
+-保存 v0.48
+

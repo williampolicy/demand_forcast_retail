@@ -183,3 +183,34 @@ echo "All done!"
 --- 解决！
 ----------
 
+以下是对你提供的三个文件的分析：
+
+1. `clear_clean_go.py` 文件的作用是清理项目的根目录。它删除一些特定类型的文件（例如 .png 和 .log 文件）、删除一些特定名称的目录（例如 `__pycache__`），删除一些特定目录（例如 `dist`）中的内容，以及删除一些特定的目录（例如 `build`, `kangforecast.egg-info`, `env_kangpypi`）。此外，它还可以显示清理前后的目录结构。
+
+2. `renew_setup_version.py` 文件的作用是更新 `setup.py` 文件中的版本号。它会将版本号的最后一个部分（即修订号）加一，然后将新的版本号写回 `setup.py` 文件中。它还会将新的版本号写入到 `new_version.txt` 文件中，供其他脚本或程序使用。
+
+3. `upload_new_version.sh` 是一个 bash 脚本，用于自动化发布新版本的流程。它会调用 `renew_setup_version.py` 更新版本号，然后删除旧的发布包，创建新的发布包，上传新的发布包到 PyPI，卸载旧版本的包，等待一段时间，然后尝试安装新版本的包。如果新版本的包无法成功安装，它会进行多次尝试，每次尝试之间有一定的延迟。
+
+整合这三个文件的一个可能的方案是将 `clear_clean_go.py` 和 `renew_setup_version.py` 合并为一个 Python 脚本，然后在 `upload_new_version.sh` 中调用这个新的 Python 脚本。注意，由于 `upload_new_version.sh` 是一个 bash 脚本，而不是 Python 脚本，所以它的内容不适合直接合并到 Python 脚本中。你可以将它改写为一个 Python 脚本，或者保持它是一个 bash 脚本，然后在其中调用 Python 脚本。
+-----
+
+
+kang@Love-Grace clear_clean_go_upgrage$ ./upload_new_version.sh --help
+Usage: ./upload_new_version.sh [options]
+
+Options:
+--help                   Display this help message and exit.
+
+This script performs the following steps:
+1. Updates version number in setup.py
+2. Removes old distributions
+3. Builds new distribution
+4. Uploads new distribution to PyPI
+5. Uninstalls old version of the package
+6. Waits for the server to update to the latest version
+7. Clears pip cache
+8. Tries to install new version of the package
+
+--
+
+

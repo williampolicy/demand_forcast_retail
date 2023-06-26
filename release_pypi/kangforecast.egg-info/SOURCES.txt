@@ -1,14 +1,6 @@
 MANIFEST.in
 README.md
 setup.py
-clear_clean_go_upgrage/README.md
-clear_clean_go_upgrage/clear_clean_go.py
-clear_clean_go_upgrage/upload_new_version.sh
-data/testdata.csv
-docs/0.command.md
-docs/note_build_release.md
-docs/note_kangforecast_version.md
-docs/simple_project.md
 kangforecast/__init__.py
 kangforecast/data_analysis.py
 kangforecast/data_loader.py
@@ -24,7 +16,6 @@ kangforecast.egg-info/dependency_links.txt
 kangforecast.egg-info/entry_points.txt
 kangforecast.egg-info/requires.txt
 kangforecast.egg-info/top_level.txt
-tests/README.md
 tests/__init__.py
 tests/check_kanglib.py
 tests/test_analysis.py
