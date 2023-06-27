@@ -490,3 +490,121 @@ usage: kangtools_upgrade_pypi_package_pip_install [-h] package_name
 This script performs several steps to update, build, upload and install a new version of a specified Python package. Here are the detailed steps: 1. Updates the version number in the setup.py
 file. 2. Removes the old distributions in the 'dist' directory. 3. Builds a new distribution of the package. 4. Uploads the new distribution to PyPI. 5. Uninstalls the old version of the
 package. 6. Waits for a while
+
+-kangtools_upgrade_pypi_package_pip_install kangforecast
+well done!
+-很好，下面我们扩展功能。
+我们当前的基础是 main.py  m1 m2 m3
+
+好的，这是一个非常实用的做法。对于大型项目来说，将数据处理的步骤分为加载、处理、显示等独立的模块可以提高代码的可维护性和扩展性。由于每个模块都具有明确的功能，因此你可以很容易地对每个模块进行单独的测试和优化。同时，这种模块化的设计也使得添加新的数据处理步骤变得很简单。
+
+对于你现在的代码，你可能需要添加更多的功能来满足你的预测需求。例如，你可能需要添加数据清洗功能（例如，处理缺失值、异常值），数据转换功能（例如，标准化、归一化、编码分类变量），特征选择和特征工程功能（例如，生成新的特征，选择最重要的特征），模型训练和验证功能，等等。
+
+为了将这些新的功能添加到你的框架中，你可以在m1load.py、m2process.py和m3show.py这些模块中添加新的函数。例如，你可以在m2process.py中添加一个新的函数来处理缺失值，然后在main.py中的main函数中调用这个新的函数。这样，你就可以将数据清洗的步骤集成到你的数据处理流程中。
+
+除此之外，你可能还需要考虑如何处理不同类型的数据（例如，数值数据、分类数据、时间序列数据等），如何优化你的模型（例如，调整模型的参数，使用不同的模型进行预测等），如何评估你的预测结果（例如，计算预测的准确率、召回率、F1分数等），等等。
+
+总的来说，根据你的预测需求，你可能需要在你的框架中添加更多的模块和功能。你需要根据你的具体需求来设计和实现这些新的功能。
+------------
+
+
+好的，根据您的新需求，我们可以进一步修改和扩充这些数据表。新的表格如下：
+
+1. **家庭消费数据（Family_Consumption）**：每一行代表一家家庭在特定时间购买的特定奶产品。列包括：Family_ID、Product_ID、Date、Price_at_Purchase（购买时的价格）、Quantity（购买的数量）、Is_Holiday（购买日期是否是节假日，这可以是一个布尔值）、Is_Extreme_Weather（购买日期是否是极端天气，这可以是一个布尔值）、Is_Discounted（购买的产品在购买日期是否有折扣，这可以是一个布尔值）。
+
+2. **奶产品数据（Dairy_Products）**：每一行代表一种奶产品在一天的信息，这是一个时间序列数据。列包括：Product_ID、Date、Price、Inventory、Sales（销售数量）。
+
+3. **节日信息（Holidays）**：每一行代表一个特定的日期是否是节日。列包括：Date、Is_Holiday（这可以是一个布尔值，表示这个日期是否是节日）。
+
+4. **供货商数据（Suppliers）**：每一行代表一种奶产品的供货商的信息。列包括：Supplier_ID、Product_ID、Supply_Price、Flexibility。
+
+5. **极端天气数据（Extreme_Weather）**：每一行代表一个特定的日期是否有极端天气事件。列包括：Date、Is_Extreme（这可以是一个布尔值，表示这个日期是否有极端天气）。
+
+6. **折扣信息（Discounts）**：每一行代表一个特定的产品在特定的时间段是否有折扣。列包括：Product_ID、Start_Date（折扣开始的日期）、End_Date（折扣结束的日期）、Discount_Rate（折扣率）。
+
+在设计数据库时，同样要保证数据的一致性和完整性。每个表都应该有一个或多个主键，可以唯一确定一行数据。一些列可能会需要设定为外键，以链接到其他表的相关数据。例如，在家庭消费数据（Family_Consumption）表中，Product_ID 可以是奶产品数据（Dairy_Products）表的外键。同样地，Date 列在所有的表中都可以链接到节日信息（Holidays）表、极端天气数据（Extreme_Weather）表和折扣信息（Discounts）表。
+
+以上的设计只是一种建议，实际的数据库设计可能需要根据您的实际需求和具体的数据情况来调整。
+
+---
+
+
+
+好的，根据您的新需求，我给出以下的数据表格的结构：
+
+主表：
+
+1. **T1_Family_Consumption**：每一行代表一个家庭在特定时间购买的特定奶制品。列包括：Transaction_ID（交易编号，作为主键）、Family_ID、Product_ID、Date、Price_at_Purchase（购买时的价格）、Quantity（购买的数量）、Is_Holiday（购买日期是否是节假日，这可以是一个布尔值）、Is_Extreme_Weather（购买日期是否是极端天气，这可以是一个布尔值）、Is_Discounted（购买的产品在购买日期是否有折扣，这可以是一个布尔值）。
+
+2. **T2_Dairy_Products**：每一行代表一种奶制品在一天的信息，这是一个时间序列数据。列包括：Product_ID（作为主键）、Date、Price、Inventory、Sales（销售数量）。
+
+3. **T3_Suppliers**：每一行代表一种奶制品的供货商的信息。列包括：Supplier_ID（作为主键）、Product_ID、Supply_Price、Flexibility。
+
+4. **T4_Discounts**：每一行代表一个特定的产品在特定的时间段是否有折扣。列包括：Discount_ID（作为主键）、Product_ID、Start_Date（折扣开始的日期）、End_Date（折扣结束的日期）、Discount_Rate（折扣率）。
+
+5. **T5_Holidays**：每一行代表一个特定的日期是否是节日。列包括：Date（作为主键）、Is_Holiday（这可以是一个布尔值，表示这个日期是否是节假日）。
+
+6. **T6_Extreme_Weather**：每一行代表一个特定的日期是否有极端天气事件。列包括：Date（作为主键）、Is_Extreme（这可以是一个布尔值，表示这个日期是否有极端天气）。
+
+附表：
+
+1. **T1S_Transactions_Summary**：每一行代表一次交易的总体信息。列包括：Transaction_ID（交易编号，作为主键）、Family_ID、Date、Total_Price（交易的总价格）、Is_Holiday（交易日期是否是节假日，这可以是一个布尔值）、Is_Extreme_Weather（交易日期是否是极端天气，这可以是一个布尔值）。
+
+2. **T4S_Discount_Events_Summary**：每一行代表一次折扣活动的总体信息。列包括：Discount_Event_ID（折扣活动编号，作为主键）、Start_Date（折扣活动开始的日期）、End_Date（折扣活动结束的日期）、Number_of_Products（参与折扣活动的产品数量）。
+
+各表之间的关系：
+
+- **T1_Family_Consumption**中的Family_ID、Product_ID、Date可以连接到其他表中的相应字段，以获取关于家
+
+庭、产品、日期的更多信息。特别是，它的Transaction_ID可以连接到**T1S_Transactions_Summary**中的Transaction_ID，以获取每一次交易的总体信息。
+
+- **T2_Dairy_Products**中的Product_ID可以连接到**T3_Suppliers**和**T4_Discounts**中的Product_ID，以获取关于供应商和折扣的信息。
+
+- **T4_Discounts**中的Discount_ID可以连接到**T4S_Discount_Events_Summary**中的Discount_Event_ID，以获取每次折扣活动的总体信息。
+
+- **T5_Holidays**和**T6_Extreme_Weather**中的Date可以连接到其他表中的Date字段，以获取关于特定日期的更多信息。
+
+这种设计可以确保数据的一致性和完整性，同时也便于数据分析和处理。
+----
+
+
+好的，根据您的新需求，我给出以下的数据表格的结构：
+
+主表：
+
+1. **T1_Family_Consumption**：每一行代表一个家庭在特定时间购买的特定奶制品。列包括：Transaction_ID（交易编号，作为主键）、Family_ID、Product_ID、Date、Price_at_Purchase（购买时的价格）、Quantity（购买的数量）、Is_Holiday（购买日期是否是节假日，这可以是一个布尔值）、Is_Extreme_Weather（购买日期是否是极端天气，这可以是一个布尔值）、Is_Discounted（购买的产品在购买日期是否有折扣，这可以是一个布尔值）。
+
+2. **T2_Dairy_Products**：每一行代表一种奶制品在一天的信息，这是一个时间序列数据。列包括：Product_ID（作为主键）、Date、Price、Inventory、Sales（销售数量）。
+
+3. **T3_Suppliers**：每一行代表一种奶制品的供货商的信息。列包括：Supplier_ID（作为主键）、Product_ID、Supply_Price、Flexibility。
+
+4. **T4_Discounts**：每一行代表一个特定的产品在特定的时间段是否有折扣。列包括：Discount_ID（作为主键）、Product_ID、Start_Date（折扣开始的日期）、End_Date（折扣结束的日期）、Discount_Rate（折扣率）。
+
+5. **T5_Holidays**：每一行代表一个特定的日期是否是节日。列包括：Date（作为主键）、Is_Holiday（这可以是一个布尔值，表示这个日期是否是节假日）。
+
+6. **T6_Extreme_Weather**：每一行代表一个特定的日期是否有极端天气事件。列包括：Date（作为主键）、Is_Extreme（这可以是一个布尔值，表示这个日期是否有极端天气）。
+
+附表：
+
+1. **T1S_Transactions_Summary**：每一行代表一次交易的总体信息。列包括：Transaction_ID（交易编号，作为主键）、Family_ID、Date、Total_Price（交易的总价格）、Is_Holiday（交易日期是否是节假日，这可以是一个布尔值）、Is_Extreme_Weather（交易日期是否是极端天气，这可以是一个布尔值）。
+
+2. **T4S_Discount_Events_Summary**：每一行代表一次折扣活动的总体信息。列包括：Discount_Event_ID（折扣活动编号，作为主键）、Start_Date（折扣活动开始的日期）、End_Date（折扣活动结束的日期）、Number_of_Products（参与折扣活动的产品数量）。
+
+各表之间的关系：
+
+- **T1_Family_Consumption**中的Family_ID、Product_ID、Date可以连接到其他表中的相应字段，以获取关于家
+
+庭、产品、日期的更多信息。特别是，它的Transaction_ID可以连接到**T1S_Transactions_Summary**中的Transaction_ID，以获取每一次交易的总体信息。
+
+- **T2_Dairy_Products**中的Product_ID可以连接到**T3_Suppliers**和**T4_Discounts**中的Product_ID，以获取关于供应商和折扣的信息。
+
+- **T4_Discounts**中的Discount_ID可以连接到**T4S_Discount_Events_Summary**中的Discount_Event_ID，以获取每次折扣活动的总体信息。
+
+- **T5_Holidays**和**T6_Extreme_Weather**中的Date可以连接到其他表中的Date字段，以获取关于特定日期的更多信息。
+
+这种设计可以确保数据的一致性和完整性，同时也便于数据分析和处理。
+
+------
+
+
+
