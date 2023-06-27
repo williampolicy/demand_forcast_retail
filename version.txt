@@ -1,2 +1,3 @@
 V.0.1
 V.0.2 - use kangtools  ©KANG - 2023-06-27  
+V.0.3 - kangtools_commit_version_to_git to git  ©KANG - 2023-06-27  

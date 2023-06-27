@@ -330,5 +330,163 @@ then ,在 tests 测试， test_m1m2m3.py
 pytest -s test_pytest_m1m2m3.py
 
 ------
+20230627-先后有一个基本的框架-有一个基本的思路。 
+-1. 看看原来做的是什么？
 
 
+demand_forcast_retail:
+python yourge_data_sales_supply_inventory.py 
+- 以某一种酸奶为例，给出需求，供给，与库存之间的关系。
+
+
+- data_time_series_v2_Milk_demand_supply.py
+比较旧的分析。 需求，供给，库存之间的关系。 
+
+python data_time_series_v2_Milk_product.py
+- 只针对牛奶，需求，供给，库存。 
+
+
+考虑家庭：
+-一个简单测试 test_simple_demand.py
+
+
+python test_extreme_weather.py
+-很清楚的展现了极端天气的影响。 
+
+
+ python data_time_series_v1_10_products.py
+ -10种产品的 需求 供给 库存情况
+
+ python read_db_family_data.py
+ -早期的程序，对10种食物，三种家庭的需求情况，差异性。 
+
+ -
+ website- 其中有一部分更进一步的数据分析
+
+
+ test_activity_special_date_v2.py
+ -经典程序， 可用。 展示了 三种（折扣、节日、极端天气）类别的影响。
+
+
+python test_activity_sensitivity_weight_1year_v2.py
+-随机-四种商品的变化。
+
+
+app.py 
+-柱状图 展示， html  flask 程序来调用 
+
+-------大体回顾了website$ 与demand_forcast_retail 目录下的程序。 
+
+下面看.demand_forcast_retail/release_pypi/kangforecast,这里程序更进一步
+
+-应该是分家庭了。 而且有了普遍的流程。 
+kang@Love-Grace kangforecast$ ls -al m*
+-rw-r--r--  1 kang  staff    76 Jun 19 13:17 m1load.py
+-rw-r--r--  1 kang  staff    64 Jun 19 14:31 m2process.py
+-rw-r--r--  1 kang  staff    45 Jun 19 14:40 m3show.py
+-rw-r--r--  1 kang  staff  1787 Jun 19 14:41 main.py
+-rw-r--r--  1 kang  staff    73 Jun 16 13:40 module1.py
+三个module . 
+m1
+m2 
+m3
+
+python main.py 
+Starting the process...
+
+m1: Loading data from ../data/testdata.csv...
+m1: Data loaded successfully. Type of the data: <class 'pandas.core.frame.DataFrame'> and the data is:
+   value
+0     10
+1     20
+2     30
+3     40
+4     50
+
+m2: Processing data...
+m2: Data processing complete. Type of the processed data: <class 'numpy.float64'> and the data is:
+30.0
+
+m3: Displaying processed data...
+30.0
+m3: Data displayed successfully.
+
+Process complete!
+---
+
+
+# In main.py
+from kangforecast.m1load import m1load
+from kangforecast.m2process import m2process
+from kangforecast.m3show import m3show
+
+def main():
+    print("Starting the process...\n")
+
+    print("m1: Loading data from ../data/testdata.csv...")
+    df = m1load("../data/testdata.csv")
+    print(f"m1: Data loaded successfully. Type of the data: {type(df)} and the data is:\n{df}\n")
+
+    print("m2: Processing data...")
+    processed_df = m2process(df)
+    print(f"m2: Data processing complete. Type of the processed data: {type(processed_df)} and the data is:\n{processed_df}\n")
+
+    print("m3: Displaying processed data...")
+    m3show(processed_df)
+    print("m3: Data displayed successfully.\n")
+
+    print("Process complete!")
+
+if __name__ == "__main__":
+    main()
+----
+
+
+-这个框架是很好的。 
+
+看一下 setup.
+    entry_points={
+        'console_scripts': [
+            'kangforecast_command=kangforecast.main:main',
+        ],
+    },
+
+
+--
+kangforecast$ kangforecast_command
+Starting the process...
+
+m1: Loading data from ../data/testdata.csv...
+m1: Data loaded successfully. Type of the data: <class 'pandas.core.frame.DataFrame'> and the data is:
+   value
+0     10
+1     20
+2     30
+3     40
+4     50
+
+m2: Processing data...
+m2: Data processing complete. Type of the processed data: <class 'numpy.float64'> and the data is:
+30.0
+
+m3: Displaying processed data...
+30.0
+m3: Data displayed successfully.
+
+Process complete!
+----
+
+
+因此，我们目前的情况是  通过 命令行，调取main，并调取main 函数，而后调取  m1 m2 m3. 完成任务。 
+----
+很好。下面我们执行一个版本自动增加的功能。 
+
+-之前有自动增加的功能，只是通过  .sh 来执行的。  
+我们try 下 kangtools
+
+kangtools_upgrade_pypi_package_pip_install -h
+usage: kangtools_upgrade_pypi_package_pip_install [-h] package_name
+
+This script performs several steps to update, build, upload and install a new version of a specified Python package. Here are the detailed steps: 1. Updates the version number in the setup.py
+file. 2. Removes the old distributions in the 'dist' directory. 3. Builds a new distribution of the package. 4. Uploads the new distribution to PyPI. 5. Uninstalls the old version of the
+package. 6. Waits for a while
