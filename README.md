@@ -47,6 +47,7 @@ Here, "Profit" refers to the profit per unit of product, expressed in US dollars
 
  "SupplyChainFlexibility" refers to the supply chain flexibility of the product, expressed in units of grades, ranging from 1 to 5, and it is also a discrete numerical variable.
 
+-
 
 
 

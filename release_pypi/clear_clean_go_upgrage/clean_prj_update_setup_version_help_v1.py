@@ -68,7 +68,7 @@ def update_version():
     new_version = '.'.join(map(str, version_parts))
     content = re.sub(r"version='(.*)'", "version='{}'".format(new_version), content)
 
-    with open('setup.py', 'w') as f:
+    with open('setup.py', 'w') as f:    
         f.write(content)
 
     # with open('new_version.txt', 'w') as f:
