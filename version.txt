@@ -3,3 +3,4 @@ V.0.2 - use kangtools  ©KANG - 2023-06-27
 V.0.3 - kangtools_commit_version_to_git to git  ©KANG - 2023-06-27  
 V.0.4 - add blog  ©KANG - 2023-06-27  
 V.0.5 - kangtools_bloguploader 20230627_blog_note_Managing-Supply-Demand-Retail.md add blog  ©KANG - 2023-06-27  
+V.0.6 - to prepare data  dairy.db  ©KANG - 2023-06-27  
